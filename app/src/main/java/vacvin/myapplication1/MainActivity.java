@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import java.text.DecimalFormat;
-import android.app.Activity;
+//import android.app.Activity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,11 +19,25 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Listen for button clicks
-        Button button =(Button)findViewById(R.id.button);
-        button.setOnClickListener(calcBMI);
+        initViews();
+        setListeners();
     }
 
+    private Button button_calc;
+    private EditText num_height;
+    private EditText num_weight;
+    private TextView show_result;
+
+    private void initViews() {
+        button_calc = (Button)findViewById(R.id.button);
+        num_height = (EditText)findViewById(R.id.editText);
+        num_weight = (EditText)findViewById(R.id.editText2);
+        show_result = (TextView)findViewById(R.id.textView4);
+    }
+
+    private  void setListeners(){
+        button_calc.setOnClickListener(calcBMI);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,16 +65,15 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             DecimalFormat nf = new DecimalFormat("0.00");
-            EditText fieldheight = (EditText)findViewById(R.id.editText);
-            EditText fieldweight = (EditText)findViewById(R.id.editText2);
             double height =
-                    Double.parseDouble(fieldheight.getText().toString())/100;
+                    Double.parseDouble(num_height.getText().toString())/100;
             double weight =
-                    Double.parseDouble(fieldweight.getText().toString());
+                    Double.parseDouble(num_weight.getText().toString());
             double BMI = weight / ( height * height);
 
-            TextView result = (TextView)findViewById(R.id.textView4);
-            result.setText("結果:您的BMI為" + nf.format(BMI));
+            show_result.setText(getText(R.string.bmi_result).toString() +
+                                getText(R.string.bmi_str1).toString() +
+                                nf.format(BMI));
         }
     };
 }

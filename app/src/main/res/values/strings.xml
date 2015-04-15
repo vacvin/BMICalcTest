@@ -8,4 +8,5 @@
     <string name="bmi_weight">體重:</string>
     <string name="bmi_btn">計算BMI</string>
     <string name="bmi_result">結果:</string>
+    <string name="bmi_str1">您的BMI為</string>
 </resources>
