@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 //import android.os.Parcel;
 import android.support.v7.app.ActionBarActivity;
@@ -29,10 +30,14 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
+        restorePrefs();
         setListeners();
     }
 
     private static int ACTIVITY_REPORT = 1000;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String PREF = "BMI_PREF";
+    public static final String PREF_HEIGHT = "BMI_HEIGHT";
     private Button button_calc;
     private EditText num_height;
     private EditText num_weight;
@@ -193,5 +198,26 @@ public class MainActivity extends ActionBarActivity {
 
         barManager.notify(0, barMsg);
 
+    }
+
+    //Restore preferences
+    private void restorePrefs(){
+        SharedPreferences settings = getSharedPreferences(PREF, 0);
+        String pref_height = settings.getString(PREF_HEIGHT, "");
+        if(! "".equals(pref_height)){
+            num_height.setText(pref_height);
+            num_weight.requestFocus();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //Save user preferences
+        SharedPreferences settings = getSharedPreferences(PREF, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(PREF_HEIGHT, num_height.getText().toString());
+        editor.commit();
     }
 }
