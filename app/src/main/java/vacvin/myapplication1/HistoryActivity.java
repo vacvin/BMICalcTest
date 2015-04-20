@@ -36,10 +36,15 @@ public class HistoryActivity extends ListActivity {
         mCursor = mDbHelper.getAll();
         //String[] from_column = new String[]{DB.KEY_height,DB.KEY_weight,DB.KEY_BMI, DB.KEY_CREATED};
         String[] from_column = new String[]{DB.KEY_BMI, DB.KEY_CREATED};
-        int[] to_layout = new int[]{android.R.id.text1, android.R.id.text2};
+        //int[] to_layout = new int[]{android.R.id.text1, android.R.id.text2};
+        int[] to_layout = new int[]{R.id.value_BMI, R.id.value_Date};
+
+        //SimpleCursorAdapter adapter =
+        //        new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2,
+        //                mCursor, from_column, to_layout, 0);
 
         SimpleCursorAdapter adapter =
-                new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2,
+                new SimpleCursorAdapter(this, R.layout.list_row,
                         mCursor, from_column, to_layout, 0);
 
         setListAdapter(adapter);
