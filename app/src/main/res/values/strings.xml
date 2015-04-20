@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyApplication1</string>
+    <string name="app_name">BMI計算器</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -16,4 +16,5 @@
     <string name="calc_err01">請先輸入身高與體重!</string>
     <string name="label_homepage">Google首頁</string>
     <string name="label_googleMap">Google Map</string>
+    <string name="title_activity_main_activity2">MainActivity2</string>
 </resources>

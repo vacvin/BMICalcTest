@@ -141,6 +141,11 @@ public class MainActivity extends ActionBarActivity {
             }catch (Exception e) {
                 showToastDialog(getText(R.string.calc_err01).toString());
             }
+
+            //open activity2
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainActivity2.class);
+            startActivity(intent);
         }
     };
 }
