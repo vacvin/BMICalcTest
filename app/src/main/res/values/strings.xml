@@ -18,4 +18,6 @@
     <string name="label_homepage">Google首頁</string>
     <string name="label_googleMap">Google Map</string>
     <string name="btn_showMsg">Show Msg at Notification</string>
+    <string name="menu_history">查看BMI歷史紀錄</string>
+    <string name="hisotrynote">點擊數據將會刪除資料</string>
 </resources>

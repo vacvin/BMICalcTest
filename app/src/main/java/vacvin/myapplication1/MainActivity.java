@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 //import android.os.Parcel;
 import android.os.AsyncTask;
@@ -37,6 +38,9 @@ public class MainActivity extends ActionBarActivity {
         restorePrefs();
         setListeners();
     }
+
+    private DB mDbHelper;
+    private Cursor mCursor;
 
     private static int ACTIVITY_REPORT = 1000;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -91,7 +95,10 @@ public class MainActivity extends ActionBarActivity {
                 openOptionsDialog();
                 break;
             case R.id.action_close:
-                finish();
+                //finish();
+                Intent intent_history = new Intent(Intent.ACTION_VIEW);
+                intent_history.setClass(MainActivity.this, HistoryActivity.class);
+                startActivity(intent_history);
                 break;
         }
 
@@ -209,7 +216,17 @@ public class MainActivity extends ActionBarActivity {
             show_result.setText(getText(R.string.bmi_result).toString() +
                     getText(R.string.bmi_str1).toString() +
                     nf.format(BMI));
+
+            SaveToDB(height.toString(), weight.toString(), BMI.toString());
         }
+    }
+
+    private void SaveToDB(String height,String weight,String BMI){
+        // record calcBMI result to db
+        mDbHelper = new DB(MainActivity.this);
+        mDbHelper.open();
+        mDbHelper.create(height, weight, BMI);
+        mDbHelper.close();
     }
 
     private OnClickListener calcBMI2 = new OnClickListener() {
@@ -253,6 +270,8 @@ public class MainActivity extends ActionBarActivity {
                 show_result.setText(getText(R.string.bmi_result).toString() +
                         getText(R.string.bmi_str1).toString() +
                         BMI);
+
+                SaveToDB(num_height.getText().toString(), num_weight.getText().toString(), BMI.toString());
             }
         }
     }
