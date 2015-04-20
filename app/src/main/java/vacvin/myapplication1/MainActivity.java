@@ -1,5 +1,6 @@
 package vacvin.myapplication1;
 
+import android.app.AlertDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 //import android.view.MenuInflater;
+import android.content.DialogInterface;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -75,7 +77,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void openOptionsDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+        dialog.setTitle(R.string.action_title);
+        dialog.setMessage(R.string.action_msg);
 
+        dialog.setPositiveButton(android.R.string.ok,
+                new DialogInterface.OnClickListener(){
+                    public void onClick(
+                        DialogInterface dialoginterface, int i){}
+                });
+        dialog.show();
     }
 
     private OnClickListener calcBMI = new OnClickListener() {
