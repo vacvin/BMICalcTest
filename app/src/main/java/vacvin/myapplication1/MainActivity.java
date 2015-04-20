@@ -3,10 +3,12 @@ package vacvin.myapplication1;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 //import android.os.Parcel;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +23,8 @@ import android.widget.TextView;
 //import android.view.MenuInflater;
 import android.content.DialogInterface;
 import android.widget.Toast;
+//import android.os.Handler;
+import android.os.SystemClock;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -39,6 +43,7 @@ public class MainActivity extends ActionBarActivity {
     public static final String PREF = "BMI_PREF";
     public static final String PREF_HEIGHT = "BMI_HEIGHT";
     private Button button_calc;
+    private Button button_calc2;
     private EditText num_height;
     private EditText num_weight;
     private TextView show_result;
@@ -46,6 +51,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void initViews() {
         button_calc = (Button)findViewById(R.id.button);
+        button_calc2 = (Button)findViewById(R.id.button2);
         num_height = (EditText)findViewById(R.id.editText);
         num_weight = (EditText)findViewById(R.id.editText2);
         show_result = (TextView)findViewById(R.id.textView4);
@@ -54,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
 
     private  void setListeners(){
         button_calc.setOnClickListener(calcBMI);
+        button_calc2.setOnClickListener(calcBMI2);
         button_showMsg.setOnClickListener(showMsg);
     }
 
@@ -136,6 +143,76 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private OnClickListener calcBMI = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                double height = Double.parseDouble(num_height.getText().toString())/100;
+                double weight = Double.parseDouble(num_weight.getText().toString());
+                double BMI = weight / ( height * height);
+
+                new BmiCalcTask().execute();
+            }catch (Exception e) {
+                showToastDialog(getText(R.string.calc_err01).toString());
+            }
+        }
+    };
+
+    private class BmiCalcTask extends AsyncTask<Void, Void, Void>{
+        private ProgressDialog Dialog = new ProgressDialog(MainActivity.this);
+        Double BMI;
+        Double height;
+        Double weight;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Dialog.setMessage("Calc...");
+            Dialog.show();
+
+            height = Double.parseDouble(num_height.getText().toString())/100;
+            weight = Double.parseDouble(num_weight.getText().toString());
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            BMI = weight / ( height * height);
+
+            // Execute some code after 2 seconds have passed
+            //Handler handler = new Handler();
+            //handler.postDelayed(new Runnable() {
+                //public void run() {
+                    //my_button.setBackgroundResource(R.drawable.defaultcard);
+                //}
+            //}, 2000);
+
+            SystemClock.sleep(2000);
+
+           // int count = 1000;
+            //for (int i = 0; i < count; i++) {
+                //publishProgress();
+                // Escape early if cancel() is called
+                //if (isCancelled()) break;
+            //}
+
+            return  null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+
+            Dialog.dismiss();
+            DecimalFormat nf = new DecimalFormat("0.00");
+
+            show_result.setText(getText(R.string.bmi_result).toString() +
+                    getText(R.string.bmi_str1).toString() +
+                    nf.format(BMI));
+        }
+    }
+
+    private OnClickListener calcBMI2 = new OnClickListener() {
         @Override
         public void onClick(View v) {
             DecimalFormat nf = new DecimalFormat("0.00");
