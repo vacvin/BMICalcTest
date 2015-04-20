@@ -1,6 +1,8 @@
 package vacvin.myapplication1;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -82,11 +84,37 @@ public class MainActivity extends ActionBarActivity {
         dialog.setTitle(R.string.action_title);
         dialog.setMessage(R.string.action_msg);
 
+        //新增ok按鈕
         dialog.setPositiveButton(android.R.string.ok,
                 new DialogInterface.OnClickListener(){
                     public void onClick(
                         DialogInterface dialoginterface, int i){}
                 });
+
+        //新增google首頁按鈕 點擊後開啟瀏覽器
+        dialog.setNegativeButton(R.string.label_homepage,
+                new DialogInterface.OnClickListener(){
+                    public  void onClick(
+                        DialogInterface dialoginterface, int i){
+                            // 開啟瀏覽器
+                            Uri uri = Uri.parse("http://www.google.com");
+                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                            startActivity(intent);
+                        }
+                });
+
+        //新增google map按鈕 點擊後開啟google map
+        dialog.setNegativeButton(R.string.label_googleMap,
+                new DialogInterface.OnClickListener(){
+                    public  void onClick(
+                            DialogInterface dialoginterface, int i){
+                        // 開啟瀏覽器
+                        Uri uri = Uri.parse("geo:25.047192, 121.516981?z=17");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                    }
+                });
+
         dialog.show();
     }
 

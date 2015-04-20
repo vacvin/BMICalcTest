@@ -14,4 +14,6 @@
     <string name="action_title">About this App</string>
     <string name="action_msg">BMI Calc</string>
     <string name="calc_err01">請先輸入身高與體重!</string>
+    <string name="label_homepage">Google首頁</string>
+    <string name="label_googleMap">Google Map</string>
 </resources>
