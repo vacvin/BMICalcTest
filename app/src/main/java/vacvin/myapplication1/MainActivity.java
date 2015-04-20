@@ -1,8 +1,11 @@
 package vacvin.myapplication1;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+//import android.os.Parcel;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,20 +32,24 @@ public class MainActivity extends ActionBarActivity {
         setListeners();
     }
 
+    private static int ACTIVITY_REPORT = 1000;
     private Button button_calc;
     private EditText num_height;
     private EditText num_weight;
     private TextView show_result;
+    private Button button_showMsg;
 
     private void initViews() {
         button_calc = (Button)findViewById(R.id.button);
         num_height = (EditText)findViewById(R.id.editText);
         num_weight = (EditText)findViewById(R.id.editText2);
         show_result = (TextView)findViewById(R.id.textView4);
+        button_showMsg = (Button)findViewById(R.id.btn_showMsg);
     }
 
     private  void setListeners(){
         button_calc.setOnClickListener(calcBMI);
+        button_showMsg.setOnClickListener(showMsg);
     }
 
     //protected static final int MENU_SETTINGS = Menu.FIRST;
@@ -127,17 +134,18 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             DecimalFormat nf = new DecimalFormat("0.00");
+            double BMI = 0;
 
             try {
                 double height =
                         Double.parseDouble(num_height.getText().toString())/100;
                 double weight =
                         Double.parseDouble(num_weight.getText().toString());
-                double BMI = weight / ( height * height);
+                BMI = weight / ( height * height);
 
-                show_result.setText(getText(R.string.bmi_result).toString() +
-                        getText(R.string.bmi_str1).toString() +
-                        nf.format(BMI));
+                //show_result.setText(getText(R.string.bmi_result).toString() +
+                //        getText(R.string.bmi_str1).toString() +
+                //        nf.format(BMI));
             }catch (Exception e) {
                 showToastDialog(getText(R.string.calc_err01).toString());
             }
@@ -145,7 +153,45 @@ public class MainActivity extends ActionBarActivity {
             //open activity2
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, MainActivity2.class);
-            startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putString("result", nf.format(BMI));
+            intent.putExtras(bundle);
+            //startActivity(intent);
+            startActivityForResult(intent, ACTIVITY_REPORT);
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK) {
+            if(requestCode == ACTIVITY_REPORT){
+                Bundle bundle = data.getExtras();
+                String BMI =bundle.getString("BMI");
+                show_result.setText(getText(R.string.bmi_result).toString() +
+                        getText(R.string.bmi_str1).toString() +
+                        BMI);
+            }
+        }
+    }
+
+    private OnClickListener showMsg = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showNotification("test");
+        }
+    };
+
+    protected void showNotification(String msg) {
+        NotificationManager barManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        Notification barMsg = new Notification.Builder(this)
+                .setTicker("New Message")
+                .setContentTitle("Title Test ")
+                .setContentText(msg)
+                .setSmallIcon(android.R.drawable.stat_sys_warning).build();
+
+        barManager.notify(0, barMsg);
+
+    }
 }
