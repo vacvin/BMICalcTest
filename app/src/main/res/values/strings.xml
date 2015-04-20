@@ -13,4 +13,5 @@
     <string name="action_close">Close</string>
     <string name="action_title">About this App</string>
     <string name="action_msg">BMI Calc</string>
+    <string name="calc_err01">請先輸入身高與體重!</string>
 </resources>

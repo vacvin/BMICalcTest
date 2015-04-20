@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 //import android.view.MenuInflater;
 import android.content.DialogInterface;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -89,19 +90,29 @@ public class MainActivity extends ActionBarActivity {
         dialog.show();
     }
 
+    private void showToastDialog(String msg) {
+        Toast popup = Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT);
+        popup.show();
+    }
+
     private OnClickListener calcBMI = new OnClickListener() {
         @Override
         public void onClick(View v) {
             DecimalFormat nf = new DecimalFormat("0.00");
-            double height =
-                    Double.parseDouble(num_height.getText().toString())/100;
-            double weight =
-                    Double.parseDouble(num_weight.getText().toString());
-            double BMI = weight / ( height * height);
 
-            show_result.setText(getText(R.string.bmi_result).toString() +
-                                getText(R.string.bmi_str1).toString() +
-                                nf.format(BMI));
+            try {
+                double height =
+                        Double.parseDouble(num_height.getText().toString())/100;
+                double weight =
+                        Double.parseDouble(num_weight.getText().toString());
+                double BMI = weight / ( height * height);
+
+                show_result.setText(getText(R.string.bmi_result).toString() +
+                        getText(R.string.bmi_str1).toString() +
+                        nf.format(BMI));
+            }catch (Exception e) {
+                showToastDialog(getText(R.string.calc_err01).toString());
+            }
         }
     };
 }
